@@ -60,6 +60,7 @@ class _AllBillsPageState extends State<AllBillsPage> {
 
 Widget billsList(List<Bill> bills) => ListView.builder(
     itemCount: bills.length,
+    key: PageStorageKey<String>('scroll position'),
     shrinkWrap: true,
     physics: ClampingScrollPhysics(),
     itemBuilder: (context, index) => BillListItem(bill: bills[index]));

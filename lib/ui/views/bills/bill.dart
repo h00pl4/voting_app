@@ -69,7 +69,7 @@ class BillPage extends StatelessWidget {
                           children: <Widget>[
                             Align(
                               child: VotingStatusWidget(
-                                  bill: model.bill, voted: false, size: 20),
+                                  bill: model.bill, voted: model.getVote != null ? true : false, size: 20),
                               alignment: Alignment.centerLeft,
                             ),
                             Align(

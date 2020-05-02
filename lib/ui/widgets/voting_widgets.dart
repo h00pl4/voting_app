@@ -114,6 +114,7 @@ class _VoteWidgetState extends State<VoteWidget> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: Theme.of(context).backgroundColor,
           title: Text('Confirm Vote',
               style: Theme.of(context).textTheme.headline6),
           content: SingleChildScrollView(

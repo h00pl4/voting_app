@@ -15,7 +15,6 @@ import 'package:provider/provider.dart';
 import 'package:voting_app/locator.dart';
 //import 'package:instabug_flutter/Instabug.dart';
 
-
 void main() {
   setupLocator();
   runApp(MyApp());
@@ -37,7 +36,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     FlutterStatusbarcolor.setStatusBarWhiteForeground(darkMode);
-        return BaseView<ThemeModel>(
+    return BaseView<ThemeModel>(
         onModelReady: (model) => model.setUser(),
         builder: (context, model, child) {
           return MaterialApp(
@@ -51,6 +50,7 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
+PageController pageController;
 
 class MainScreen extends StatefulWidget {
   @override
@@ -59,21 +59,16 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int index = 0;
-  int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      //current page
-      body: SafeArea(
-        top: false,
-        child: IndexedStack(index: _currentIndex, children: <Widget>[
-          AllBillsPage(),
-          AllIssuesPage(),
-          SettingsPage()
-        ]),
+    return Scaffold(
+      body: PageView(
+        children: [AllBillsPage(), AllIssuesPage(), SettingsPage()],
+        controller: pageController,
+        physics: NeverScrollableScrollPhysics(),
+        onPageChanged: onPageChanged,
       ),
-      // the nav bar at the bottom --> [bills - issues - Settings]
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Theme.of(context).colorScheme.primary,
         unselectedItemColor: Theme.of(context).colorScheme.primaryVariant,
@@ -92,13 +87,32 @@ class _MainScreenState extends State<MainScreen> {
               title: Text('Settings'),
               backgroundColor: Theme.of(context).backgroundColor),
         ],
-        currentIndex: _currentIndex,
-        onTap: (int index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
+        currentIndex: index,
+        onTap: navigationTapped,
       ),
     );
+  }
+
+  void navigationTapped(int index) {
+    //Animating Page
+    pageController.jumpToPage(index);
+  }
+
+  void onPageChanged(int page) {
+    setState(() {
+      this.index = page;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    pageController = PageController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    pageController.dispose();
   }
 }
